@@ -24,6 +24,7 @@ body, html {
 
 .row_flex {
     display: flex;
+    align-items: center;
 }
 
 .row_grid {
@@ -33,10 +34,12 @@ body, html {
 
 .row_table {
     display: table;
+
 }
 
 .row_table .search {
     display: table-cell;
+    vertical-align: top;
 }
 
 
@@ -49,7 +52,7 @@ body, html {
 }
 
 .input {
-    height: 40px;
+    height: 42px;
     width: 100%;
     outline: none;
     background-color: #FBFBFB;
@@ -77,6 +80,8 @@ body, html {
     border-radius: 3px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.44), 0 0 7px rgba(0, 0, 0, 0.07), inset 0 0 0 1px rgba(255, 255, 255, 0.48);
     margin-left: 7px;
+    white-space: nowrap;
+    display: block;
 }
 
 .button:hover {
