@@ -1,1 +1,12 @@
 @import "reset.css";
+@import "~antd/dist/antd.css";
+
+.App {
+    max-width: 1024px;
+    margin: 50px auto;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 600;
+}
