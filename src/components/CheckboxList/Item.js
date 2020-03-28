@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox } from 'antd';
 
@@ -7,7 +7,7 @@ const Item = React.memo(({ id, name, checked, disabledList, onCheckToggle }) => 
     <Checkbox
       disabled={!checked && disabledList}
       checked={checked}
-      onChange={() => onCheckToggle(id)}
+      onChange={useCallback(() => onCheckToggle(id), [onCheckToggle, id])}
       style={{ width: '100%'}}
     >
       {name}

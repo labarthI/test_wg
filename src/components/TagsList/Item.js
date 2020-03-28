@@ -1,11 +1,11 @@
-import React  from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 
 const Item = React.memo(({ id, name, onCheckToggle }) => (
   <Tag
     closable
-    onClose={() => onCheckToggle(id)}
+    onClose={useCallback(() => onCheckToggle(id), [onCheckToggle, id])}
     key={id}
   >
     {name}
