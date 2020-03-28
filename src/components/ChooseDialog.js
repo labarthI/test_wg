@@ -1,40 +1,72 @@
-import React from 'react';
-import { Checkbox, Form, Input, Modal, Select, Tag } from 'antd';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Form, Input, Modal } from 'antd';
+import { TagList } from './TagsList/List';
+import { CheckboxList } from './CheckboxList/List';
+import { searchByItemName, filterByItemOrder, updateListByCheck, getCheckedItemList } from '../utils';
+import { selectData } from '../mockData';
+import {SelectField} from './SelectField'
 
-export const ChooseDialog = ({ list, visible, onSave, onCancel, onCheck }) => (
-  <Modal
-    title="Диалог выбора элементов"
-    visible={visible}
-    onOk={onSave}
-    onCancel={onCancel}
-    okText="Сохранить"
-    cancelText="Отмена"
-  >
-    <Form>
-      <Input.Group compact>
-        <Form.Item label="Поиск" style={{ marginRight: 10 }}>
-          <Input />
-        </Form.Item>
+export class ChooseDialog extends PureComponent {
+  static propTypes = {
+    onSave: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    list: PropTypes.array.isRequired,
+    visible: PropTypes.bool.isRequired,
+  };
 
-        <Form.Item label="Фильтр">
-          <Select defaultValue="never" style={{ width: 150 }}>
-            <Select.Option value="never">Без фильтра</Select.Option>
-            <Select.Option value="ten"> Номер > 10</Select.Option>
-            <Select.Option value="hundred">Номер > 100</Select.Option>
-            <Select.Option value="two-hundrer">Номер > 200</Select.Option>
-          </Select>
-        </Form.Item>
-      </Input.Group>
-    </Form>
-    <div style={{ height: '260px', overflow: 'auto', border: '1px solid #e5e5e5', padding: '10px' }}>
-      {list.map((item) => <div key={item.id} style={{ marginBottom: '5px'}}><Checkbox checked={item.checked} onChange={() => onCheck(item.id)}>{item.name}</Checkbox></div>)}
-    </div>
-    <div style={{ margin: '10px'}}>Выбранные элементы на данный момент: </div>
-    <Tag closable onClose={Function.prototype}>
-      Элемент 5
-    </Tag>
-    <Tag closable onClose={Function.prototype}>
-      Элемент 51
-    </Tag>
-  </Modal>
-);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      list: props.list,
+      search: null,
+      filter: 0,
+    }
+  }
+
+  handleCheckToggle = (id) =>  this.setState((state) => ({ list: updateListByCheck(state.list, id) }));
+
+  handleSave = () => this.props.onSave(this.state.list);
+
+  handleChangeInput = ({ target: { name, value }}) =>  this.setState({ [name]: value  });
+
+  handleChangeSelect = (value) => this.setState({ filter: value });
+
+  render() {
+    const { visible, onCancel } = this.props;
+    const { list, search, filter } = this.state;
+    const tags = getCheckedItemList(list);
+    const disabledList = tags.length > 2;
+    const updatedList = filterByItemOrder(searchByItemName(list, search), filter);
+
+    return (
+      <Modal
+        title="Диалог выбора элементов"
+        visible={visible}
+        onOk={this.handleSave}
+        onCancel={onCancel}
+        okText="Сохранить"
+        cancelText="Отмена"
+      >
+        <Form>
+          <Input.Group compact>
+            <Form.Item label="Поиск" style={{ marginRight: 10 }}>
+              <Input onChange={this.handleChangeInput} name="search" />
+            </Form.Item>
+            <Form.Item label="Фильтр">
+              <SelectField
+                onChange={this.handleChangeSelect}
+                defaultValue={selectData[0].value}
+                list={selectData}
+              />
+            </Form.Item>
+          </Input.Group>
+        </Form>
+        <CheckboxList disabledList={disabledList} list={updatedList} onCheckToggle={this.handleCheckToggle} />
+        <div style={{ margin: '10px'}}>Выбранные элементы на данный момент: </div>
+        <TagList tags={tags} onCheckToggle={this.handleCheckToggle} />
+      </Modal>
+    );
+  }
+}

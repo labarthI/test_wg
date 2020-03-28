@@ -3,7 +3,8 @@
 
 .App {
     max-width: 1024px;
-    margin: 50px auto;
+    margin: 0 auto;
+    padding: 50px;
 }
 
 .title {

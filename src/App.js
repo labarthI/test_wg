@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import './App.css';
-import { Button, Tag } from 'antd';
+import { Button } from 'antd';
 import { ChooseDialog } from './components/ChooseDialog';
+import { TagList } from './components/TagsList/List';
 import { list } from './mockData'
+import { getCheckedItemList, updateListByCheck } from './utils';
 
 class App extends PureComponent {
   state = {
@@ -10,54 +12,42 @@ class App extends PureComponent {
     list,
   };
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
+  showModal = () => this.setState({ visible: true });
 
-  handleSave = (e) => {
-    this.setState({
-      visible: false,
-    });
-  };
+  handleSave = (list) => this.setState({ visible: false, list });
 
-  handleCancel = (e) => {
-    this.setState({
-      visible: false,
-    });
-  };
+  handleCancel = () => this.setState({ visible: false });
 
-  handleCheck = (index) =>  {}
+  handleCheckToggle = (id) =>  this.setState((state) => ({ list: updateListByCheck(state.list, id) }));
+
+  getTitle = (tagsLength) => {
+    return tagsLength ?
+      (<div style={{ margin: '10px 0'}}>{`На данный момент у вас выбрано ${tagsLength} элемент${tagsLength > 1 ? 'а' : ''}:`}</div>)
+      : (<div>На данный момент у вас ничего не выбрано</div>)
+  }
 
   render() {
     const { list, visible } = this.state;
+    const tags = getCheckedItemList(this.state.list);
+    const title = this.getTitle(tags.length);
 
     return (
       <div className="App">
         <h1 className="title">Выбор элементов</h1>
-        <div style={{ margin: '10px 0'}}>На данный момент у вас выбрано x элементов:</div>
-        <Tag closable onClose={Function.prototype}>
-          Элемент 5
-        </Tag>
-        <Tag closable onClose={Function.prototype}>
-          Элемент 51
-        </Tag>
-        <br />
-        <br />
-        <Button>Изменить мой выбор</Button>
-        <ChooseDialog
-          list={list}
-          visible={visible}
-          onSave={this.handleSave}
-          onCacnel={this.handleCancel}
-          onShow={this.showModal}
-          onCheck={this.handleCheck}
-        />
+        <span>{title}</span>
+        <TagList tags={tags} onCheckToggle={this.handleCheckToggle} />
+        <Button style={{ display: 'block' , marginTop: '10px'}} onClick={this.showModal}>Изменить мой выбор</Button>
+        {this.state.visible ?
+          <ChooseDialog
+            list={list}
+            visible={visible}
+            onSave={this.handleSave}
+            onCancel={this.handleCancel}
+            onShow={this.showModal}
+          /> : null}
       </div>
     );
   }
-
 }
 
 export default App;
