@@ -23,6 +23,7 @@ class App extends PureComponent {
   render() {
     const { list, visible } = this.state;
     const tags = getCheckedItemList(this.state.list);
+
     return (
       <div style={{ maxWidth: 1024, margin: '0 auto', padding: 50}}>
         <h1>Выбор элементов</h1>
