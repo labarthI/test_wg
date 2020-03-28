@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button } from 'antd';
 import { ChooseDialog } from './ChooseDialog';
 import { TagList } from './components/TagsList/List';
+import { Title } from './components/Title';
 import { list } from './mockData'
 import { getCheckedItemList, updateListByCheck } from './utils';
 
@@ -19,21 +20,13 @@ class App extends PureComponent {
 
   handleCheckToggle = (id) =>  this.setState((state) => ({ list: updateListByCheck(state.list, id) }));
 
-  getTitle = (tagsLength) => {
-    return tagsLength ?
-      (<div style={{ margin: '10px 0'}}>{`На данный момент у вас выбрано ${tagsLength} элемент${tagsLength > 1 ? 'а' : ''}:`}</div>)
-      : (<div>На данный момент у вас ничего не выбрано</div>)
-  }
-
   render() {
     const { list, visible } = this.state;
     const tags = getCheckedItemList(this.state.list);
-    const title = this.getTitle(tags.length);
-
     return (
       <div style={{ maxWidth: 1024, margin: '0 auto', padding: 50}}>
         <h1>Выбор элементов</h1>
-        <span>{title}</span>
+        <Title count={tags.length} />
         <TagList tags={tags} onCheckToggle={this.handleCheckToggle} />
         <Button style={{ display: 'block' , marginTop: '10px'}} onClick={this.showModal}>Изменить мой выбор</Button>
         {this.state.visible ?

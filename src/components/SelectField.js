@@ -8,8 +8,7 @@ export const SelectField = React.memo(({ onChange, list, defaultValue = list[0].
   </Select>
 ));
 
-
-SelectField.PropTypes = {
+SelectField.propTypes = {
   onChange: PropTypes.func.isRequired,
   list: PropTypes.array.isRequired,
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number ]),

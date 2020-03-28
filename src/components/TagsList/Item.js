@@ -1,29 +1,25 @@
-import React, { PureComponent } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 
-class Item extends PureComponent {
-  static propTypes = {
-    onCheckToggle: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
-  };
+const Item = React.memo(({ id, name, onCheckToggle }) => {
+  const onCheckToggleMemoized = useCallback(() => onCheckToggle(id),[id]);
 
-  handleCheckToggle = () => this.props.onCheckToggle(this.props.id);
+  return (
+    <Tag
+      closable
+      onClose={onCheckToggleMemoized}
+      key={id}
+    >
+      {name}
+    </Tag>
+  )
+});
 
-  render() {
-    const { id, name } = this.props;
-
-    return (
-      <Tag
-        closable
-        onClose={this.handleCheckToggle}
-        key={id}
-      >
-        {name}
-      </Tag>
-    );
-  }
+Item.propTypes = {
+  onCheckToggle: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 }
 
 export { Item as TagItem };
