@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
-import './App.css';
 import { Button } from 'antd';
-import { ChooseDialog } from './components/ChooseDialog';
+import { ChooseDialog } from './ChooseDialog';
 import { TagList } from './components/TagsList/List';
 import { list } from './mockData'
 import { getCheckedItemList, updateListByCheck } from './utils';
 
 class App extends PureComponent {
   state = {
-    visible: true,
+    visible: false,
     list,
   };
 
@@ -32,8 +31,8 @@ class App extends PureComponent {
     const title = this.getTitle(tags.length);
 
     return (
-      <div className="App">
-        <h1 className="title">Выбор элементов</h1>
+      <div style={{ maxWidth: 1024, margin: '0 auto', padding: 50}}>
+        <h1>Выбор элементов</h1>
         <span>{title}</span>
         <TagList tags={tags} onCheckToggle={this.handleCheckToggle} />
         <Button style={{ display: 'block' , marginTop: '10px'}} onClick={this.showModal}>Изменить мой выбор</Button>

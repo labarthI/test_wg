@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Modal } from 'antd';
-import { TagList } from './TagsList/List';
-import { CheckboxList } from './CheckboxList/List';
-import { searchByItemName, filterByItemOrder, updateListByCheck, getCheckedItemList } from '../utils';
-import { selectData } from '../mockData';
-import {SelectField} from './SelectField'
+import { TagList } from './components/TagsList/List';
+import { CheckboxList } from './components/CheckboxList/List';
+import { SelectField } from './components/SelectField';
+import { searchByItemName, filterByItemOrder, updateListByCheck, getCheckedItemList } from './utils';
+import { selectData } from './mockData';
 
 export class ChooseDialog extends PureComponent {
   static propTypes = {
@@ -57,7 +57,6 @@ export class ChooseDialog extends PureComponent {
             <Form.Item label="Фильтр">
               <SelectField
                 onChange={this.handleChangeSelect}
-                defaultValue={selectData[0].value}
                 list={selectData}
               />
             </Form.Item>

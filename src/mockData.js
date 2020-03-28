@@ -25,6 +25,6 @@ for (let i = 1; i <= 300; i++) {
     name: `Элемент ${i}`,
     checked: false,
   });
-};
+}
 
 export { list };

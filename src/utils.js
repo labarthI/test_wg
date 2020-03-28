@@ -1,4 +1,4 @@
-export const searchByItemName = (list, value) => list.filter((item) => value ? item.name.indexOf(value) !== -1: true);
+export const searchByItemName = (list, value) => list.filter((item) => value ? item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1: true);
 
 export const filterByItemOrder = (list, value) => list.filter((item) => item.id > value);
 
