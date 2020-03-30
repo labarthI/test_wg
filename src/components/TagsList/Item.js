@@ -16,6 +16,6 @@ Item.propTypes = {
   onCheckToggle: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
-}
+};
 
 export { Item as TagItem };

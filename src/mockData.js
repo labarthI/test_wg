@@ -17,7 +17,7 @@ export const selectData = [
   },
 ];
 
-let list = [];
+const list = [];
 
 for (let i = 1; i <= 300; i++) {
   list.push({

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { CheckboxItem } from './Item';
 
 const List = React.memo(({ list, onCheckToggle, disabledList }) => (
-  <div style={{ height: '260px', overflow: 'auto', border: '1px solid #e5e5e5', padding: '10px' }}>
+  <div style={{
+    height: '260px', overflow: 'auto', border: '1px solid #e5e5e5', padding: '10px',
+  }}
+  >
     {
       list.map((item) => (
         <CheckboxItem
@@ -20,7 +23,11 @@ const List = React.memo(({ list, onCheckToggle, disabledList }) => (
 ));
 
 List.propTypes = {
-  list: PropTypes.array.isRequired,
+  list: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    checked: PropTypes.bool.isRequired,
+  })).isRequired,
   onCheckToggle: PropTypes.func.isRequired,
   disabledList: PropTypes.bool.isRequired,
 };

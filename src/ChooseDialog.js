@@ -4,14 +4,21 @@ import { Form, Input, Modal } from 'antd';
 import { TagList } from './components/TagsList/List';
 import { CheckboxList } from './components/CheckboxList/List';
 import { SelectField } from './components/SelectField';
-import { searchByItemName, filterByItemOrder, updateListByCheck, getCheckedItemList } from './utils';
+import {
+  searchByItemName, filterByItemOrder, updateListByCheck, getCheckedItemList,
+} from './utils';
 import { selectData } from './mockData';
+import { MAX_TAGS_COUNT } from './constants';
 
 export class ChooseDialog extends PureComponent {
   static propTypes = {
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    list: PropTypes.array.isRequired,
+    list: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      checked: PropTypes.bool.isRequired,
+    })).isRequired,
     visible: PropTypes.bool.isRequired,
   };
 
@@ -22,14 +29,21 @@ export class ChooseDialog extends PureComponent {
       list: props.list,
       search: null,
       filter: 0,
-    }
+    };
   }
 
-  handleCheckToggle = (id) =>  this.setState((state) => ({ list: updateListByCheck(state.list, id) }));
+  handleCheckToggle = (id) => (
+    this.setState((state) => ({ list: updateListByCheck(state.list, id) }))
+  );
 
-  handleSave = () => this.props.onSave(this.state.list);
+  handleSave = () => {
+    const { onSave } = this.props;
+    const { list } = this.state;
 
-  handleChangeInput = ({ target: { name, value }}) =>  this.setState({ [name]: value  });
+    onSave(list);
+  }
+
+  handleChangeInput = ({ target: { name, value } }) => this.setState({ [name]: value });
 
   handleChangeSelect = (value) => this.setState({ filter: value });
 
@@ -37,7 +51,7 @@ export class ChooseDialog extends PureComponent {
     const { visible, onCancel } = this.props;
     const { list, search, filter } = this.state;
     const tags = getCheckedItemList(list);
-    const disabledList = tags.length > 2;
+    const disabledList = tags.length >= MAX_TAGS_COUNT;
     const updatedList = filterByItemOrder(searchByItemName(list, search), filter);
 
     return (
@@ -62,8 +76,12 @@ export class ChooseDialog extends PureComponent {
             </Form.Item>
           </Input.Group>
         </Form>
-        <CheckboxList disabledList={disabledList} list={updatedList} onCheckToggle={this.handleCheckToggle} />
-        <div style={{ margin: '10px'}}>Выбранные элементы на данный момент: </div>
+        <CheckboxList
+          disabledList={disabledList}
+          list={updatedList}
+          onCheckToggle={this.handleCheckToggle}
+        />
+        <div style={{ margin: '10px' }}>Выбранные элементы на данный момент: </div>
         <TagList tags={tags} onCheckToggle={this.handleCheckToggle} />
       </Modal>
     );

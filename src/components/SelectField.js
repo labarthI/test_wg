@@ -10,6 +10,9 @@ export const SelectField = React.memo(({ onChange, list, defaultValue = list[0].
 
 SelectField.propTypes = {
   onChange: PropTypes.func.isRequired,
-  list: PropTypes.array.isRequired,
-  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number ]),
-}
+  list: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    label: PropTypes.string.isRequired,
+  })).isRequired,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
